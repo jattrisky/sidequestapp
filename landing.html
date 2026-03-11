@@ -1,58 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SideQuest - Focus Timer RPG</title>
-<meta name="description" content="Turn your real-life tasks into an epic RPG. Built for ADHD brains that need a reason to care.">
-<meta property="og:title" content="SideQuest - Focus Timer RPG">
-<meta property="og:description" content="Every focus app failed my ADHD brain. So I built my own.">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--gold:#D4A843;--gold-dim:#B8922E;--black:#0A0A0C}
-body{font-family:'Inter',-apple-system,sans-serif;background:var(--black);color:#C8C8D0;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
-.page{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 24px 48px;text-align:center}
-.content{position:relative;z-index:1;max-width:420px;width:100%}
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;opacity:0.85}
-h1{font-family:'Playfair Display',serif;font-weight:900;font-size:32px;color:#F0F0F2;line-height:1.15;margin-bottom:14px}
-h1 span{color:var(--gold)}
-.sub{font-size:15px;color:#8A8A94;line-height:1.6;margin-bottom:28px}
-.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--gold);color:var(--black);font-weight:600;font-size:17px;padding:18px 24px;border-radius:14px;text-decoration:none;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
-.cta:hover{background:var(--gold-dim);transform:translateY(-1px)}
-.cta:active{transform:scale(0.98)}
-.cta svg{width:22px;height:22px;flex-shrink:0}
-.trial{font-family:'JetBrains Mono',monospace;font-size:12px;color:#555;margin-top:14px;letter-spacing:0.5px}
-.proof{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:24px}
-.stars{color:var(--gold);font-size:14px;letter-spacing:2px}
-.proof-text{font-size:12px;color:#666}
-.links{margin-top:32px;display:flex;justify-content:center;gap:20px}
-.links a{font-size:11px;color:#444;text-decoration:none}
-.links a:hover{color:#666}
-@keyframes subtle-glow{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,0)}50%{box-shadow:0 0 20px 4px rgba(212,168,67,0.15)}}
-.cta{animation:subtle-glow 3s ease-in-out infinite}
-.fire-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 30%,rgba(212,168,67,0.08) 0%,transparent 60%),radial-gradient(ellipse at 50% 60%,rgba(180,80,20,0.05) 0%,transparent 50%),var(--black)}
-@media(min-width:500px){h1{font-size:40px}.sub{font-size:16px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SideQuest — Focus Timer RPG</title>
+    <meta name="description" content="Turn your real-life tasks into an epic RPG. Built for ADHD brains that need a reason to care.">
+    <meta property="og:title" content="SideQuest — Focus Timer RPG">
+    <meta property="og:description" content="Every focus app failed my ADHD brain. So I built my own.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #D4A843;
+            --gold-dark: #B8922E;
+            --bg: #1A1520;
+            --bg-warm: #241E2A;
+            --card: #FDFAF5;
+            --card-text: #1A1520;
+            --card-sub: #5A5264;
+            --badge-bg: #F0ECE4;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--card-text);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .page {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(170deg, #2D2435 0%, #1A1520 40%, #191118 100%);
+            overflow: hidden;
+        }
+
+        /* ── Hero card ── */
+        .card {
+            background: var(--card);
+            border-radius: 28px;
+            padding: 48px 32px 40px;
+            margin: 48px 20px 0;
+            max-width: 400px;
+            width: calc(100% - 40px);
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .app-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--card-text);
+            margin-bottom: 28px;
+            letter-spacing: -0.3px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 32px;
+            color: var(--card-text);
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--card-sub);
+            line-height: 1.55;
+            margin-bottom: 32px;
+        }
+
+        /* ── CTA button ── */
+        .cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: var(--gold);
+            color: var(--card-text);
+            font-weight: 600;
+            font-size: 17px;
+            padding: 18px 24px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cta:hover {
+            background: var(--gold-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(212,168,67,0.3);
+        }
+
+        .cta:active { transform: scale(0.98); }
+
+        .cta svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+        .trial {
+            font-size: 13px;
+            color: #9A9A9A;
+            margin-top: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Social proof badges ── */
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid #E8E4DC;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .badge-icon {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .laurel { color: var(--gold); font-size: 18px; opacity: 0.7; }
+
+        .badge-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--card-text);
+        }
+
+        .badge-icon .stars {
+            font-size: 16px;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+
+        .badge-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--card-sub);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* ── Feature previews ── */
+        .previews {
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .preview-bubble {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--bg-warm);
+            border: 2px solid rgba(212,168,67,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .preview-bubble:hover {
+            transform: scale(1.05);
+            border-color: rgba(212,168,67,0.4);
+        }
+
+        .bubble-emoji { font-size: 28px; margin-bottom: 6px; }
+
+        .bubble-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #C8C0D0;
+            line-height: 1.3;
+        }
+
+        .bubble-sub {
+            font-size: 9px;
+            color: #7A7284;
+            margin-top: 2px;
+        }
+
+        /* Row offsets for honeycomb feel */
+        .previews-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .previews-row.offset {
+            margin-top: -16px;
+            margin-left: 66px;
+        }
+
+        /* ── Bottom links ── */
+        .links {
+            margin-top: 40px;
+            padding-bottom: 48px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .links a {
+            font-size: 12px;
+            color: #5A5264;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .links a:hover { color: var(--gold); }
+
+        /* ── Responsive ── */
+        @media (min-width: 500px) {
+            h1 { font-size: 38px; }
+            .card { padding: 56px 40px 48px; }
+        }
+
+        @media (max-width: 360px) {
+            .card { padding: 36px 24px 32px; }
+            h1 { font-size: 28px; }
+            .badges { gap: 8px; }
+            .preview-bubble { width: 100px; height: 100px; }
+            .bubble-emoji { font-size: 22px; }
+        }
+    </style>
 </head>
 <body>
-<div class="page">
-<div class="fire-bg"></div>
-<div class="content">
-<div class="eyebrow">Focus Timer RPG</div>
-<h1>Every focus app <span>failed</span> my ADHD brain.</h1>
-<p class="sub">Complete real tasks. Unlock epic stories with characters that remember you. Earn legendary loot. For doing your laundry.</p>
-<div class="proof"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="proof-text">on the App Store</span></div>
-<a href="https://apps.apple.com/app/id6759470375" class="cta">
-<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-Download Free on the App Store
-</a>
-<p class="trial">7 days free then $9.99/mo</p>
-<div class="links"><a href="index.html">Support</a><a href="privacy-policy.html">Privacy</a></div>
-</div>
-</div>
+
+    <div class="page">
+
+        <!-- Hero Card -->
+        <div class="card">
+            <div class="app-name">SideQuest</div>
+
+            <h1>Turn your real tasks into an epic RPG.</h1>
+            <p class="subtitle">Join thousands of ADHD brains who finally found a reason to care about their to-do list.</p>
+
+            <a href="https://apps.apple.com/app/id6759470375" class="cta">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Go To App Store
+            </a>
+
+            <p class="trial">7 days free · then $9.99/mo</p>
+
+            <!-- Badges -->
+            <div class="badges">
+                <div class="badge">
+                    <div class="badge-icon">
+                        <span class="laurel">🏆</span>
+                    </div>
+                    <span class="badge-label">Focus<br>Timer RPG</span>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    </div>
+                    <span class="badge-label">Built for<br>iOS</span>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">
+                        <span class="stars">★★★★★</span>
+                    </div>
+                    <span class="badge-label">5-Star<br>Rated</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Previews (Imprint-style bubbles) -->
+        <div class="previews">
+            <div class="previews-row">
+                <div class="preview-bubble">
+                    <span class="bubble-emoji">⚔️</span>
+                    <span class="bubble-label">Epic Quests</span>
+                    <span class="bubble-sub">from real tasks</span>
+                </div>
+                <div class="preview-bubble">
+                    <span class="bubble-emoji">📖</span>
+                    <span class="bubble-label">Ongoing Story</span>
+                    <span class="bubble-sub">that remembers you</span>
+                </div>
+                <div class="preview-bubble">
+                    <span class="bubble-emoji">🎒</span>
+                    <span class="bubble-label">Legendary Loot</span>
+                    <span class="bubble-sub">for doing laundry</span>
+                </div>
+            </div>
+            <div class="previews-row offset">
+                <div class="preview-bubble">
+                    <span class="bubble-emoji">🧙</span>
+                    <span class="bubble-label">5 NPCs</span>
+                    <span class="bubble-sub">unique characters</span>
+                </div>
+                <div class="preview-bubble">
+                    <span class="bubble-emoji">⏱️</span>
+                    <span class="bubble-label">Focus Timer</span>
+                    <span class="bubble-sub">with narrative</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom links -->
+        <div class="links">
+            <a href="index.html">Support</a>
+            <a href="privacy-policy.html">Privacy</a>
+        </div>
+
+    </div>
+
 </body>
 </html>
