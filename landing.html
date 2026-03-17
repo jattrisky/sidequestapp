@@ -3,201 +3,975 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SideQuest — ADHD Focus RPG</title>
-    <meta property="og:title" content="SideQuest — ADHD Focus RPG">
-    <meta property="og:description" content="Turn your real-life tasks into epic quests. Built for ADHD brains.">
-    <meta property="og:image" content="https://jattrisky.github.io/sidequestapp/assets/hero-phone.jpg">
+    <title>SideQuest — Turn Real Tasks Into an Epic RPG | ADHD Focus Timer</title>
+    <meta name="description" content="The focus app that turns your real tasks into AI-generated RPG quests with stories, loot, and characters that remember you. Built for ADHD brains. Free on iOS.">
+    <meta property="og:title" content="SideQuest — My ADHD brain needed quests, not checkboxes.">
+    <meta property="og:description" content="Turn real tasks into AI-generated RPG stories with loot, NPCs, and a narrative that evolves with every session.">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://jattrisky.github.io/sidequestapp/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --gold: #D4A843;
-            --bg: #06080D;
-            --muted: #5A5666;
+            --gold-light: #F0DBA8;
+            --gold-dark: #B8922E;
+            --bg: #0E0B12;
+            --bg-card: #1A1520;
+            --bg-warm: #241E2A;
+            --text: #EDEAEF;
+            --text-dim: #9B93A4;
+            --text-bright: #FFFFFF;
+            --accent-purple: #8B5CF6;
+            --accent-cyan: #22D3EE;
+            --radius: 20px;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg);
-            color: #fff;
+            color: var(--text);
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
 
-        .page {
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 24px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        /* Ambient glow */
-        .page::before {
-            content: '';
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
+        .section { padding: 80px 0; }
 
-        /* Particles */
-        .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-        .p {
-            position: absolute; border-radius: 50%;
-            background: var(--gold); opacity: 0;
-            animation: rise linear infinite;
-        }
-        .p:nth-child(1) { left: 14%; width: 2px; height: 2px; animation-duration: 7s; animation-delay: 0s; }
-        .p:nth-child(2) { left: 32%; width: 3px; height: 3px; animation-duration: 9s; animation-delay: 1.2s; }
-        .p:nth-child(3) { left: 55%; width: 2px; height: 2px; animation-duration: 6s; animation-delay: 0.5s; }
-        .p:nth-child(4) { left: 74%; width: 2px; height: 2px; animation-duration: 8s; animation-delay: 2s; }
-        .p:nth-child(5) { left: 88%; width: 3px; height: 3px; animation-duration: 10s; animation-delay: 3s; }
-
-        @keyframes rise {
-            0% { transform: translateY(90vh); opacity: 0; }
-            8% { opacity: 0.4; }
-            85% { opacity: 0.15; }
-            100% { transform: translateY(-10vh); opacity: 0; }
-        }
-
-        h1 {
-            font-weight: 900;
-            font-size: clamp(38px, 10vw, 64px);
-            line-height: 1.04;
-            letter-spacing: -2.5px;
-            margin-bottom: 16px;
-            max-width: 480px;
-            position: relative;
-        }
-
-        h1 .gold {
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             color: var(--gold);
-            text-shadow: 0 0 60px rgba(212,168,67,0.2);
+            margin-bottom: 12px;
         }
 
-        .sub {
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(28px, 5vw, 40px);
+            color: var(--text-bright);
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
             font-size: 17px;
-            color: var(--muted);
-            line-height: 1.55;
-            max-width: 340px;
-            margin-bottom: 40px;
-            position: relative;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-width: 540px;
         }
 
-        /* CTA */
-        .cta {
+        /* ── CTA Button ── */
+        .cta-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             background: var(--gold);
-            color: var(--bg);
+            color: #1A1520;
             font-weight: 700;
             font-size: 17px;
-            padding: 18px 40px;
+            padding: 18px 32px;
             border-radius: 16px;
             text-decoration: none;
             transition: all 0.2s;
-            position: relative;
-            box-shadow: 0 4px 30px rgba(212,168,67,0.3);
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .cta:hover {
+        .cta-btn:hover {
+            background: var(--gold-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 50px rgba(212,168,67,0.45);
+            box-shadow: 0 8px 32px rgba(212,168,67,0.3);
+        }
+        .cta-btn:active { transform: scale(0.98); }
+        .cta-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+        .cta-sub {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-top: 12px;
         }
 
-        .cta:active { transform: scale(0.97); }
-        .cta svg { width: 22px; height: 22px; }
-
-        .proof {
+        /* ════════════════════════════════
+           HERO SECTION
+           ════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 0 60px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(212,168,67,0.08) 0%, transparent 50%);
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content { max-width: 480px; }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
             gap: 8px;
-            margin-top: 20px;
+            background: rgba(212,168,67,0.1);
+            border: 1px solid rgba(212,168,67,0.2);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(32px, 6vw, 52px);
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            color: var(--text-dim);
+            line-height: 1.65;
+            margin-bottom: 32px;
+        }
+
+        .hero-proof {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .proof-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .proof-val {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-bright);
+        }
+
+        .proof-val .stars { color: var(--gold); letter-spacing: 1px; }
+
+        .proof-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Phone with Video ── */
+        .phone-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone {
+            width: 280px;
+            background: #000;
+            border-radius: 44px;
+            padding: 12px;
+            box-shadow:
+                0 0 0 2px #333,
+                0 40px 80px rgba(0,0,0,0.5),
+                0 0 120px rgba(139,92,246,0.1);
             position: relative;
         }
 
-        .stars { color: var(--gold); font-size: 14px; letter-spacing: 1px; }
-        .proof-text { font-size: 13px; color: #3A3640; }
+        .phone-screen {
+            width: 100%;
+            border-radius: 34px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
 
-        /* Footer */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            left: 0; right: 0;
+        .phone-screen video {
+            width: 100%;
+            display: block;
+            border-radius: 34px;
+        }
+
+        /* ════════════════════════════════
+           PROBLEM SECTION
+           ════════════════════════════════ */
+        .problem {
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 100%);
+        }
+
+        .problem .section-subtitle { margin: 0 auto 40px; }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 28px 20px;
             text-align: center;
         }
 
-        .footer a {
+        .problem-icon { font-size: 32px; margin-bottom: 12px; }
+
+        .problem-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-bright);
+            margin-bottom: 6px;
+        }
+
+        .problem-desc {
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .problem-arrow {
+            font-size: 32px;
+            color: var(--gold);
+            margin: 40px 0 12px;
+        }
+
+        .problem-solution {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 24px;
+            color: var(--gold);
+        }
+
+        /* ════════════════════════════════
+           HOW IT WORKS
+           ════════════════════════════════ */
+        .how-it-works { background: var(--bg-card); }
+        .how-it-works .section-subtitle { margin-bottom: 48px; }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #1A1520;
+            font-weight: 800;
+            font-size: 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 15px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .step-example {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .step-example-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+
+        .step-example-text {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* ════════════════════════════════
+           SCREENSHOT SHOWCASE
+           ════════════════════════════════ */
+        .showcase {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg) 100%);
+            overflow: hidden;
+        }
+
+        .showcase .section-subtitle { margin-bottom: 48px; }
+
+        .screenshot-scroll {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 24px 24px;
+            scrollbar-width: none;
+        }
+
+        .screenshot-scroll::-webkit-scrollbar { display: none; }
+
+        .screenshot-item {
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+            width: min(320px, 75vw);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transition: transform 0.3s;
+        }
+
+        .screenshot-item:hover { transform: scale(1.02); }
+
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ════════════════════════════════
+           FEATURES
+           ════════════════════════════════ */
+        .features .section-subtitle { margin-bottom: 48px; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            padding: 28px 24px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(212,168,67,0.2);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon { font-size: 28px; margin-bottom: 14px; }
+
+        .feature-name {
+            font-weight: 700;
+            font-size: 17px;
+            color: var(--text-bright);
+            margin-bottom: 6px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* ════════════════════════════════
+           STORY SHOWCASE
+           ════════════════════════════════ */
+        .story-showcase {
+            text-align: center;
+            background: var(--bg-card);
+        }
+
+        .story-showcase .section-subtitle { margin: 0 auto 48px; }
+
+        .story-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .story-card {
+            background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(212,168,67,0.05));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            text-align: left;
+        }
+
+        .story-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .story-npc {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .story-npc-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-bright);
+        }
+
+        .story-npc-role {
             font-size: 11px;
-            color: #222;
+            color: var(--text-dim);
+        }
+
+        .story-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.65;
+            font-style: italic;
+        }
+
+        .story-task {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        /* ════════════════════════════════
+           REVIEWS
+           ════════════════════════════════ */
+        .reviews {
+            text-align: center;
+        }
+
+        .reviews .section-subtitle { margin: 0 auto 40px; }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: left;
+        }
+
+        .review-stars {
+            color: var(--gold);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .review-author {
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        /* ════════════════════════════════
+           FINAL CTA
+           ════════════════════════════════ */
+        .final-cta {
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+            background: var(--bg-card);
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(212,168,67,0.06) 0%, transparent 70%);
+        }
+
+        .final-cta .container { position: relative; z-index: 1; }
+
+        .final-cta .section-title {
+            font-size: clamp(28px, 5vw, 44px);
+            margin-bottom: 12px;
+        }
+
+        .final-cta .section-subtitle { margin: 0 auto 36px; }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 32px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--text-dim);
             text-decoration: none;
-            margin: 0 10px;
             transition: color 0.2s;
         }
 
-        .footer a:hover { color: var(--gold); }
+        .footer-links a:hover { color: var(--gold); }
 
-        /* Animations */
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(16px); }
+        /* ════════════════════════════════
+           ANIMATIONS
+           ════════════════════════════════ */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .phone { animation: float 6s ease-in-out infinite; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 { animation: fade-up 0.5s ease-out 0.1s both; }
-        .sub { animation: fade-up 0.5s ease-out 0.2s both; }
-        .cta { animation: fade-up 0.5s ease-out 0.3s both; }
-        .proof { animation: fade-up 0.5s ease-out 0.4s both; }
+        .hero-content { animation: fadeUp 0.8s ease-out; }
+        .phone-wrapper { animation: fadeUp 0.8s ease-out 0.15s both; }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 30px rgba(212,168,67,0.3); }
-            50% { box-shadow: 0 4px 44px rgba(212,168,67,0.5); }
+        /* ════════════════════════════════
+           RESPONSIVE
+           ════════════════════════════════ */
+        @media (max-width: 768px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content { max-width: 100%; }
+            .hero-proof { justify-content: center; }
+            .hero { padding: 80px 0 40px; min-height: auto; }
+            .phone-wrapper { order: -1; }
+            .phone { width: 220px; }
+
+            .problem-grid,
+            .review-grid {
+                grid-template-columns: 1fr;
+                max-width: 360px;
+            }
+
+            .steps,
+            .story-cards {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .feature-grid { grid-template-columns: 1fr; }
+
+            .section { padding: 60px 0; }
+
+            .screenshot-item { width: min(280px, 80vw); }
         }
-
-        .cta { animation: fade-up 0.5s ease-out 0.3s both, pulse 3s ease-in-out 2s infinite; }
     </style>
 </head>
 <body>
 
-    <div class="page">
-        <div class="particles">
-            <div class="p"></div><div class="p"></div><div class="p"></div>
-            <div class="p"></div><div class="p"></div>
+    <!-- ══════════════════════════════════
+         HERO SECTION
+         ══════════════════════════════════ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-eyebrow">
+                    <span>⚔️</span> Focus Timer RPG — Free on iOS
+                </div>
+
+                <h1>Your to-do list deserves an <em>epic story.</em></h1>
+
+                <p class="hero-sub">SideQuest turns real tasks into AI-generated RPG adventures — with loot drops, recurring characters, and a narrative that evolves with every focus session. Built for ADHD brains that need a <strong style="color: var(--text-bright)">reason</strong> to start.</p>
+
+                <a href="https://apps.apple.com/app/id6759470375" class="cta-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    Download Free on the App Store
+                </a>
+                <p class="cta-sub">5 quests free · No credit card needed</p>
+
+                <div class="hero-proof">
+                    <div class="proof-item">
+                        <span class="proof-val"><span class="stars">★★★★★</span></span>
+                        <span class="proof-label">5.0 on App Store</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-val">iOS 17+</span>
+                        <span class="proof-label">iPhone & iPad</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-val">AI-Powered</span>
+                        <span class="proof-label">Every story unique</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone with real app video -->
+            <div class="phone-wrapper">
+                <div class="phone">
+                    <div class="phone-screen">
+                        <video autoplay muted loop playsinline>
+                            <source src="app-demo.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         PROBLEM SECTION
+         ══════════════════════════════════ -->
+    <section class="section problem">
+        <div class="container">
+            <div class="section-label">The problem</div>
+            <h2 class="section-title">Every focus app assumes you just need a timer.</h2>
+            <p class="section-subtitle">But if you have ADHD, you already know that's not the hard part. The hard part is caring enough to start.</p>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏱️</div>
+                    <div class="problem-label">Pomodoro timers</div>
+                    <div class="problem-desc">Great concept, zero emotional stakes. Day 3: abandoned.</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">✅</div>
+                    <div class="problem-label">To-do list apps</div>
+                    <div class="problem-desc">Checkbox dopamine lasts about 4 seconds. Not enough.</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎮</div>
+                    <div class="problem-label">Gamified apps</div>
+                    <div class="problem-desc">Collect coins, level up... but there's no story. No reason to come back.</div>
+                </div>
+            </div>
+
+            <div class="problem-arrow">↓</div>
+            <div class="problem-solution">SideQuest gives you a reason.</div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         HOW IT WORKS
+         ══════════════════════════════════ -->
+    <section class="section how-it-works">
+        <div class="container">
+            <div class="section-label">How it works</div>
+            <h2 class="section-title">Three steps. One epic story.</h2>
+            <p class="section-subtitle">Type a task, set a timer, and let the AI do the rest.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Enter any real task</div>
+                    <div class="step-desc">Type whatever you need to focus on. Studying, cleaning, working out — anything becomes a quest.</div>
+                    <div class="step-example">
+                        <div class="step-example-label">You type</div>
+                        <div class="step-example-text">"Study for biology exam"</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Focus with purpose</div>
+                    <div class="step-desc">A timer counts down while you work. Your story is being written in the background — the longer you focus, the bigger the reward.</div>
+                    <div class="step-example">
+                        <div class="step-example-label">30 minutes later</div>
+                        <div class="step-example-text">Timer complete. Quest ready to claim.</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Unlock your story</div>
+                    <div class="step-desc">Get a unique AI-written story chapter featuring your hero, your NPCs, and loot drops. Every quest advances the narrative.</div>
+                    <div class="step-example">
+                        <div class="step-example-label">You receive</div>
+                        <div class="step-example-text">Story chapter + Rare loot: "Scholar's Lantern" (+15% XP)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         SCREENSHOT SHOWCASE
+         ══════════════════════════════════ -->
+    <section class="section showcase">
+        <div class="container">
+            <div class="section-label">See it in action</div>
+            <h2 class="section-title">Not just a timer. A living world.</h2>
+            <p class="section-subtitle">Every screen is designed to make focus feel like play.</p>
         </div>
 
-        <h1>My ADHD brain<br>needed <span class="gold">quests,</span><br>not checkboxes.</h1>
-
-        <p class="sub">SideQuest turns real tasks into RPG adventures with XP, loot, and a story that remembers you.</p>
-
-        <a href="https://apps.apple.com/app/id6759470375" class="cta">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            Get It Free on the App Store
-        </a>
-
-        <div class="proof">
-            <span class="stars">★★★★★</span>
-            <span class="proof-text">ADHD Focus RPG · Free on iOS</span>
+        <div class="screenshot-scroll">
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_40jad440jad440ja.jpg" alt="Create your hero and begin your adventure" loading="lazy">
+            </div>
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_3pryjr3pryjr3pry.jpg" alt="Finish tasks and get rewarded with XP" loading="lazy">
+            </div>
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_heqc9pheqc9pheqc.jpg" alt="Earn legendary loot for doing real tasks" loading="lazy">
+            </div>
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_m1x1ncm1x1ncm1x1.jpg" alt="Characters that remember your story" loading="lazy">
+            </div>
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_9gwb2v9gwb2v9gwb.jpg" alt="Every quest continues the epic narrative" loading="lazy">
+            </div>
+            <div class="screenshot-item">
+                <img src="Gemini_Generated_Image_nhs8jqnhs8jqnhs8.jpg" alt="Focus with friends and quest together" loading="lazy">
+            </div>
         </div>
+    </section>
 
-        <div class="footer">
+    <!-- ══════════════════════════════════
+         MID-PAGE CTA
+         ══════════════════════════════════ -->
+    <section style="text-align: center; padding: 48px 0 0;">
+        <div class="container">
+            <a href="https://apps.apple.com/app/id6759470375" class="cta-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download Free on the App Store
+            </a>
+            <p class="cta-sub">5 quests free · No credit card needed</p>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         FEATURES
+         ══════════════════════════════════ -->
+    <section class="section features">
+        <div class="container">
+            <div class="section-label">Features</div>
+            <h2 class="section-title">Everything your ADHD brain needs.</h2>
+            <p class="section-subtitle">Every feature creates emotional investment that makes you actually want to come back.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <div class="feature-name">Serialized AI Stories</div>
+                    <div class="feature-desc">Not random one-offs. A continuous narrative with 8 rotating story arcs, cliffhangers, and hooks that pay off over time. Think TV series, not random episodes.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧙</div>
+                    <div class="feature-name">5 Recurring NPCs</div>
+                    <div class="feature-desc">A Mentor hiding pain, a Rival seeking redemption, a Trickster who's secretly lonely, a Villain who thinks they're right, and a Mysterious figure who knows too much.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚔️</div>
+                    <div class="feature-name">Loot & Equipment</div>
+                    <div class="feature-desc">Every quest can drop loot — Common to Legendary rarity — each with AI-generated artwork and XP multipliers. Yes, you can get a legendary sword for doing laundry.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-name">AI-Generated Art</div>
+                    <div class="feature-desc">Your hero portrait, quest scenes, and loot items are all generated with AI art unique to your story. No two players see the same world.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏝️</div>
+                    <div class="feature-name">Custom World Themes</div>
+                    <div class="feature-desc">Dark medieval, post-apocalyptic, anime, sci-fi — or describe your own world and the AI builds it. Colors, archetypes, and particle effects adapt to match.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <div class="feature-name">Co-Op Focus Sessions</div>
+                    <div class="feature-desc">Invite friends via SharePlay to focus together. Everyone gets a +25% XP bonus when the whole party completes the quest. Up to 4 heroes.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-name">Dynamic Island & Widgets</div>
+                    <div class="feature-desc">Your quest timer lives on the Dynamic Island and Lock Screen. Check your streak, XP, and level without even opening the app.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔥</div>
+                    <div class="feature-name">Streaks & Progression</div>
+                    <div class="feature-desc">Daily streaks with XP multipliers, level-up milestones with cosmetic rewards, and a Prestige system for players who want to start a new season.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         STORY SHOWCASE
+         ══════════════════════════════════ -->
+    <section class="section story-showcase">
+        <div class="container">
+            <div class="section-label">The narrative</div>
+            <h2 class="section-title">By quest 10, you'll care about these characters.</h2>
+            <p class="section-subtitle">Here's a taste of what a single quest might generate. Every story is unique to your hero, your world, and your task.</p>
+
+            <div class="story-cards">
+                <div class="story-card">
+                    <div class="story-card-header">
+                        <div class="story-npc" style="background: rgba(59,130,246,0.15);">🧓</div>
+                        <div>
+                            <div class="story-npc-name">Kael the Wanderer</div>
+                            <div class="story-npc-role">Mentor</div>
+                        </div>
+                    </div>
+                    <div class="story-text">"The old map-maker pressed a crumbling page into your hands. 'The Spiral Archives don't forgive the unprepared,' he whispered, his blind eye catching light it shouldn't. 'But you — you study like someone who's been there before.'"</div>
+                    <div class="story-task">📚 Task: Study for midterms</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-card-header">
+                        <div class="story-npc" style="background: rgba(239,68,68,0.15);">⚡</div>
+                        <div>
+                            <div class="story-npc-name">Vex</div>
+                            <div class="story-npc-role">Rival</div>
+                        </div>
+                    </div>
+                    <div class="story-text">"Vex leaned against the gym entrance, arms crossed. 'Back again? Thought you'd quit after last time.' Her smirk faded. 'Fine. Race you to the third set. Loser buys potions.'"</div>
+                    <div class="story-task">💪 Task: Gym workout</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-card-header">
+                        <div class="story-npc" style="background: rgba(139,92,246,0.15);">🎭</div>
+                        <div>
+                            <div class="story-npc-name">Patches</div>
+                            <div class="story-npc-role">Trickster</div>
+                        </div>
+                    </div>
+                    <div class="story-text">"'You know what's under three months of dust?' Patches held up a gold coin he'd definitely stolen. 'Treasure. I checked.' He tossed you a broom and vanished through the window. Typical."</div>
+                    <div class="story-task">🧹 Task: Clean the apartment</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         REVIEWS
+         ══════════════════════════════════ -->
+    <section class="section reviews">
+        <div class="container">
+            <div class="section-label">Reviews</div>
+            <h2 class="section-title">What players are saying.</h2>
+            <p class="section-subtitle">From the App Store.</p>
+
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-text">"This genuinely keeps me on track because it feels like I'm gaming and not actually working."</div>
+                    <div class="review-author">— App Store Review</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-text">"Clean and calming design. Makes studying feel much more manageable."</div>
+                    <div class="review-author">— App Store Review</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-text">"I actually look forward to doing chores now because I want to see what happens next in my story."</div>
+                    <div class="review-author">— App Store Review</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         FINAL CTA
+         ══════════════════════════════════ -->
+    <section class="section final-cta">
+        <div class="container">
+            <h2 class="section-title">Your story starts with one quest.</h2>
+            <p class="section-subtitle">Download SideQuest and turn your next task into something worth finishing.</p>
+
+            <a href="https://apps.apple.com/app/id6759470375" class="cta-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download Free on the App Store
+            </a>
+            <p class="cta-sub">5 quests free · No account required · iOS 17+</p>
+        </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <div class="footer-links">
             <a href="index.html">Support</a>
-            <a href="privacy-policy.html">Privacy</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
         </div>
-    </div>
+    </footer>
 
 </body>
 </html>
